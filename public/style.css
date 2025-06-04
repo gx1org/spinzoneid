@@ -1,8 +1,11 @@
 body {
   background-color: #ddd;
 }
+nav, footer {
+  background-color: #888;
+}
 main {
-  min-height: 100vh;
+  min-height: calc(-110px + 100vh);
 }
 @media (min-width: 587px) {
   .container {

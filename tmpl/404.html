@@ -8,11 +8,11 @@
   <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
-  <main class="container bg-light p-4 px-3 px-sm-4 text-center">
-    <nav class="border-bottom mb-4">
-      <h1>Spin.zone.id</h1>
-      <p class="lead">Create and Share Your Spin!</p>
-    </nav>
+  <nav class="text-light container p-3 text-center d-flex">
+    <a href="/" class="text-light"><h1 class="h3 m-0">Spin.zone.id</h1></a>
+    <p class="mb-0 mt-1 ms-auto">Create and Share Spin!</p>
+  </nav>
+  <main class="container bg-light p-4 px-3 px-sm-4" x-data="main">
     <div class="">
       <h1 class="display-1">404</h1>
       {{ if .error }}
@@ -25,5 +25,10 @@
       <a href="/" class="btn btn-secondary">&larr; Home</a>
     </div>
   </main>
+  <footer class="text-light container py-3 text-center">
+    <p class="m-0">Made By: 
+      <a href="https://gx1.org" class="text-light" target="_blank" rel="noopener noreferrer">PT. Geksa</a>
+    </p>
+  </footer>
 </body>
 </html>

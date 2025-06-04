@@ -8,11 +8,11 @@
   <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
+  <nav class="text-light container p-3 text-center d-flex">
+    <a href="/" class="text-light"><h1 class="h3 m-0">Spin.zone.id</h1></a>
+    <p class="mb-0 mt-1 ms-auto">Create and Share Spin!</p>
+  </nav>
   <main class="container bg-light p-4 px-3 px-sm-4" x-data="main">
-    <nav class="border-bottom mb-4 text-center">
-      <h1><a href="/">Spin.zone.id</a></h1>
-      <p class="lead">Create and Share Your Spin!</p>
-    </nav>
     <div class="mb-4 text-center">
       <h3 class="">{{ .spin.Name }}</h3>
       <div>
@@ -23,14 +23,14 @@
     {{ if .result.ID }}
     <template x-if="ready">
       <div>
-        <div class="text-center mb-4 border p-3">
+        <div class="text-center mb-4 border p-3 rounded bg-white">
           <h3>
             Congratulation!
           </h3>
           <p class="mb-3">
             Result for token: <b>"{{ .result.Token }}"</b>
           </p>
-          <button class="btn btn-lg btn-secondary mb-3 w-100">
+          <button class="btn btn-lg btn-primary mb-3 w-100">
             {{ .result.SelectedOption }}
           </button>
           <a href="javascript:;" @click="shareResult">Share this result!</a>
@@ -43,14 +43,14 @@
       </div>
     </template>
     <template x-if="!ready">
-      <div class="text-center mb-4 border p-5">
+      <div class="text-center mb-4 border p-5 rounded bg-white">
         <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
     </template>
     {{ end }}
-    <div class="border p-3 mb-4 collapse" id="details">
+    <div class="border p-3 mb-4 collapse rounded bg-white" id="details">
       <div class="mb-3">
         <p class="mb-1 text-muted">Options:</p>
         <ul class="ps-3">
@@ -82,6 +82,11 @@
     </template>
     {{ end }}
   </main>
+  <footer class="text-light container py-3 text-center">
+    <p class="m-0">Made By: 
+      <a href="https://gx1.org" class="text-light" target="_blank" rel="noopener noreferrer">PT. Geksa</a>
+    </p>
+  </footer>
   <script src="//unpkg.com/alpinejs" defer></script>
   <script src="/assets/main.js" defer></script>
   <script>

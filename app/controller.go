@@ -42,6 +42,7 @@ func generateResult(result *Result) {
 	result.ID = generateID()
 	result.SpinID = result.Spin.ID
 	result.SelectedOption = pickRandomOption(parseOptions(result.Spin.Options))
+	result.Spin = nil
 	if err := DB.Create(&result); err != nil {
 		result.ID = generateID()
 		DB.Create(&result)
