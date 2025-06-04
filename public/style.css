@@ -1,0 +1,11 @@
+body {
+  background-color: #ddd;
+}
+main {
+  min-height: 100vh;
+}
+@media (min-width: 587px) {
+  .container {
+    max-width: 540px;
+  }
+}

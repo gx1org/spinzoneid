@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spin.zone.id</title>
+  <link rel="stylesheet" href="https://bootswatch.com/5/brite/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <main class="container bg-light p-4 px-3 px-sm-4" x-data="main">
+    <nav class="border-bottom mb-4 text-center">
+      <h1>Spin.zone.id</h1>
+      <p class="lead">Create and Share Your Spin!</p>
+    </nav>
+    <template x-if="mode == 'home'">
+      <div class="mb-4 text-center">
+        <h3 class="mb-4 text-center">
+          Welcome!
+        </h3>
+        <p class="mb-3">
+          Create new spin or edit your the created spin.
+        </p>
+        <button class="btn btn-primary me-2" @click="changeMode('create')">Create</button>
+        <button class="btn btn-secondary" @click="changeMode('edit')">Edit/Delete</button>
+      </div>
+    </template>
+    <template x-if="mode == 'create'">
+      <form @submit.prevent="handleCreate" action="/s" method="post">
+        <h3 class="mb-4 text-center">
+          Create Spin
+        </h3>
+        <div class="mb-3">
+          <label for="name" class="form-label">Name *</label>
+          <input type="text" class="form-control" x-model="form.name" required="true" placeholder="Your Next Year Travel Gift">
+        </div>
+        <div class="mb-3">
+          <label for="name" class="form-label">Options *</label>
+          <textarea class="form-control" x-model="form.options" required="true" rows="7" placeholder="London
+Paris
+Dubai
+Bali
+Maldive"></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="name" class="form-label">Comments</label>
+          <textarea class="form-control" x-model="form.comment" placeholder="This is special for you"></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="name" class="form-label">Password *</label>
+          <input type="text" class="form-control" x-model="form.password" required="true">
+        </div>
+        <div class="mb-3">
+          After created, you can only edit the comment or delete the spin using the given password.
+        </div>
+        <div class="d-flex">
+          <button type="button" class="btn w-100 btn-secondary" @click="changeMode('home')">&larr; Cancel</button>
+          <button class="btn w-100 btn-primary ms-3">Submit</button>
+        </div>
+      </form>
+    </template>
+    <template x-if="mode == 'edit'">
+      <form @submit.prevent="handleEdit(false)" action="/s" method="post">
+        <h3 class="mb-4 text-center">
+          Edit or Delete Spin
+        </h3>
+        <div class="mb-3">
+          <label for="name" class="form-label">Spin ID *</label>
+          <input type="text" class="form-control" x-model="formEdit.id" required="true" placeholder="" @input="refineID">
+        </div>
+        <div class="mb-3">
+          <label for="name" class="form-label">Comments</label>
+          <textarea class="form-control" x-model="formEdit.comment" placeholder="This is special for you"></textarea>
+        </div>
+        <div class="mb-4">
+          <label for="name" class="form-label">Password *</label>
+          <input type="text" class="form-control" x-model="formEdit.password" required="true">
+        </div>
+        <div class="mb-3 d-flex">
+          <button type="button" class="btn w-100 btn-danger" @click="handleDelete" :disabled="!formEdit.password || !formEdit.id">Delete</button>
+          <button class="btn w-100 btn-primary ms-3">Update</button>
+        </div>
+        <div class="d-flex">
+          <button type="button" class="btn w-100 btn-secondary" @click="changeMode('home')">&larr; Cancel</button>
+        </div>
+      </form>
+    </template>
+  </main>
+  <script src="//unpkg.com/alpinejs" defer></script>
+  <script src="/assets/main.js" defer></script>
+  <script>
+    const main = () => ({
+      init() {
+      },
+      mode: 'home',
+      changeMode(mode) {
+        this.mode = mode
+      },
+      form: {},
+      formEdit: {
+        name: '-',
+        options: '-',
+      },
+      refineID() {
+        const id = this.formEdit.id || ''
+        this.formEdit.id = id.replace(/[^a-z0-9+]/g, '')
+      },
+      handleCreate() {
+        http.post('/s', this.form).then(data => {
+          if (data.error) {
+            alert(data.error)
+          } else {
+            location.href = '/s/'+data.spin.id
+          }
+        }).catch(e => {
+          alert('Something went wrong!')
+          console.error(e)
+        })
+      },
+      handleEdit(isDelete) {
+        const self = this
+        this.formEdit.is_delete = isDelete
+        http.post(`/s/${this.formEdit.id}/update`, this.formEdit).then(data => {
+          if (data.error) {
+            alert(data.error)
+          } else {
+            alert(self.form.is_delete ? 'Deleted!' : 'Updated!')
+            location.reload()
+          }
+        }).catch(e => {
+          alert('Something went wrong!')
+          console.error(e)
+        })
+      },
+      handleDelete() {
+        if (!confirm('Are you sure to delete this Spin?')) return
+        this.handleEdit(true)
+      },
+    })
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('main', main)
+    })
+  </script>
+</body>
+</html>

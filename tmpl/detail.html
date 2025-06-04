@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spin.zone.id</title>
+  <link rel="stylesheet" href="https://bootswatch.com/5/brite/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <main class="container bg-light p-4 px-3 px-sm-4" x-data="main">
+    <nav class="border-bottom mb-4 text-center">
+      <h1><a href="/">Spin.zone.id</a></h1>
+      <p class="lead">Create and Share Your Spin!</p>
+    </nav>
+    <div class="mb-4 text-center">
+      <h3 class="">{{ .spin.Name }}</h3>
+      <div>
+        <span class="text-muted">(Spin ID: <b>{{ .spin.ID }}</b>)</span>
+        <a href="javascript:;" @click="shareSpin">Share!</a>
+      </div>
+    </div>
+    {{ if .result.ID }}
+    <template x-if="ready">
+      <div>
+        <div class="text-center mb-4 border p-3">
+          <h3>
+            Congratulation!
+          </h3>
+          <p class="mb-3">
+            Result for token: <b>"{{ .result.Token }}"</b>
+          </p>
+          <button class="btn btn-lg btn-secondary mb-3 w-100">
+            {{ .result.SelectedOption }}
+          </button>
+          <a href="javascript:;" @click="shareResult">Share this result!</a>
+        </div>
+        <div class="text-center mb-4">
+          <a href="javascript:;" class="text-muted" @click="showDetail">
+            Show/hide Spin details
+          </a>
+        </div>
+      </div>
+    </template>
+    <template x-if="!ready">
+      <div class="text-center mb-4 border p-5">
+        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </template>
+    {{ end }}
+    <div class="border p-3 mb-4 collapse" id="details">
+      <div class="mb-3">
+        <p class="mb-1 text-muted">Options:</p>
+        <ul class="ps-3">
+          {{ range .options }}
+          <li>{{ . }}</li>
+          {{ end }}
+        </ul>
+      </div>
+      <div class="">
+        <p class="mb-1 text-muted">Comment:</p>
+        <p class="mb-0" style="white-space: pre-line;">{{ .spin.Comment }}</p>
+      </div>
+    </div>
+    {{ if not .result.ID }}
+    <template x-if="ready">
+      <div>
+        <div class="text-center mb-4">
+          <h5>Try Your Luck!</h5>
+        </div>
+        <form action="/s/{{ .spin.ID }}" method="get">
+          <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Token (e.g. Name/Email)" required name="token">
+          </div>
+          <div>
+            <button class="btn btn-primary w-100">Submit</button>
+          </div>
+        </form>
+      </div>
+    </template>
+    {{ end }}
+  </main>
+  <script src="//unpkg.com/alpinejs" defer></script>
+  <script src="/assets/main.js" defer></script>
+  <script>
+    const main = () => ({
+      init() {
+        if (this.result == '') {
+          this.showDetail()
+        } else {
+          this.animateResult()
+        }
+      },
+      ready: false,
+      result: '{{ .result.SelectedOption }}',
+      animateResult() {
+        setTimeout(() => {
+          this.ready = true
+        }, 3000);
+      },
+      showDetail() {
+        document.getElementById('details').classList.toggle('show')
+        this.ready = true
+      },
+      shareSpin() {
+        const text = `${location.origin}${location.pathname}`
+        navigator.clipboard.writeText(text)
+        alert('Spin URL copied!')
+      },
+      shareResult() {
+        const text = `${location.href}`
+        navigator.clipboard.writeText(text)
+        alert('Result URL copied!')
+      },
+    })
+    document.addEventListener('alpine:init', () => {
+      Alpine.data('main', main)
+    })
+  </script>
+</body>
+</html>

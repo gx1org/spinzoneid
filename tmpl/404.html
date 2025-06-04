@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spin.zone.id</title>
+  <link rel="stylesheet" href="https://bootswatch.com/5/brite/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <main class="container bg-light p-4 px-3 px-sm-4 text-center">
+    <nav class="border-bottom mb-4">
+      <h1>Spin.zone.id</h1>
+      <p class="lead">Create and Share Your Spin!</p>
+    </nav>
+    <div class="">
+      <h1 class="display-1">404</h1>
+      {{ if .error }}
+      <p class="lead">{{ .error}}</p>
+      {{ else }}
+      <p class="lead">Page not found</p>
+      {{ end }}
+    </div>
+    <div>
+      <a href="/" class="btn btn-secondary">&larr; Home</a>
+    </div>
+  </main>
+</body>
+</html>
