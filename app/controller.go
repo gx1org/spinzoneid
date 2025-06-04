@@ -21,12 +21,12 @@ func handleDetail(c *gin.Context) {
 	}
 
 	result := Result{}
-	token := c.Query("token")
-	if token != "" {
-		DB.Where("spin_id", spin.ID).Where("token", token).First(&result)
+	input := c.Query("input")
+	if input != "" {
+		DB.Where("spin_id", spin.ID).Where("input", input).First(&result)
 		if result.ID == "" {
 			result.Spin = &spin
-			result.Token = token
+			result.Input = input
 			generateResult(&result)
 		}
 	}
@@ -60,11 +60,12 @@ func handleCreate(c *gin.Context) {
 
 	curatedOptions := strings.Join(parseOptions(req.Options), "\n")
 	spin := Spin{
-		ID:       generateID(),
-		Name:     req.Name,
-		Options:  curatedOptions,
-		Comment:  req.Comment,
-		Password: req.Password,
+		ID:        generateID(),
+		Name:      req.Name,
+		Options:   curatedOptions,
+		Comment:   req.Comment,
+		InputHint: req.InputHint,
+		Password:  req.Password,
 	}
 	if err := DB.Create(&spin); err != nil {
 		spin.ID = generateID()
@@ -104,6 +105,7 @@ func handleUpdate(c *gin.Context) {
 	if req.IsDelete {
 		DB.Delete(&spin)
 	} else {
+		spin.InputHint = req.InputHint
 		spin.Comment = req.Comment
 		DB.Save(&spin)
 	}
@@ -111,4 +113,34 @@ func handleUpdate(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "Success!",
 	})
+}
+
+func handleDetailAPI(c *gin.Context) {
+	spin := Spin{}
+	DB.Where("id", c.Param("id")).First(&spin)
+	if spin.ID == "" {
+		c.JSON(404, gin.H{
+			"error": "Spin not found or already deleted",
+		})
+		return
+	}
+
+	resp := gin.H{
+		"spin":    spin,
+		"options": parseOptions(spin.Options),
+	}
+
+	input := c.Query("input")
+	if input != "" {
+		result := Result{}
+		DB.Where("spin_id", spin.ID).Where("input", input).First(&result)
+		if result.ID == "" {
+			result.Spin = &spin
+			result.Input = input
+			generateResult(&result)
+		}
+		resp["result"] = result
+	}
+
+	c.JSON(200, resp)
 }

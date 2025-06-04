@@ -37,6 +37,7 @@ type Spin struct {
 	Name      string         `gorm:"size:191" json:"name"`
 	Options   string         `json:"options"`
 	Comment   string         `json:"comment"`
+	InputHint string         `gorm:"size:191" json:"input_hint"`
 	Password  string         `gorm:"size:191" json:"-"`
 	CreatedAt time.Time      `json:"created_at"`
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
@@ -46,7 +47,7 @@ type Result struct {
 	ID             string         `gorm:"type:varchar(36);primarykey;" json:"id"`
 	Spin           *Spin          `json:"spin,omitempty"`
 	SpinID         string         `gorm:"size:36" json:"spin_id"`
-	Token          string         `gorm:"size:191" json:"token"`
+	Input          string         `gorm:"size:191" json:"input"`
 	SelectedOption string         `gorm:"size:191" json:"selected_option"`
 	CreatedAt      time.Time      `json:"created_at"`
 	DeletedAt      gorm.DeletedAt `gorm:"index" json:"-"`

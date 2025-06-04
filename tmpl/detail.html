@@ -28,7 +28,7 @@
             Congratulation!
           </h3>
           <p class="mb-3">
-            Result for token: <b>"{{ .result.Token }}"</b>
+            Result for input: <b>"{{ .result.Input }}"</b>
           </p>
           <button class="btn btn-lg btn-primary mb-3 w-100">
             {{ .result.SelectedOption }}
@@ -37,7 +37,7 @@
         </div>
         <div class="text-center mb-4">
           <a href="/s/{{ .result.SpinID }}" class="text-muted" target="_blank">
-            Try different token! &nearr;
+            Try different input &nearr;
           </a>
         </div>
       </div>
@@ -72,7 +72,7 @@
         </div>
         <form action="/s/{{ .spin.ID }}" method="get">
           <div class="mb-3">
-            <input type="text" class="form-control" placeholder="Token (e.g. Name/Email)" required name="token">
+            <input type="text" class="form-control" placeholder="Input ({{ .spin.InputHint }})" required name="input">
           </div>
           <div>
             <button class="btn btn-primary w-100">Submit</button>

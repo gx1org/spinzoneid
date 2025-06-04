@@ -32,29 +32,34 @@
         </h3>
         <div class="mb-3">
           <label for="name" class="form-label">Name *</label>
-          <input type="text" class="form-control" x-model="form.name" required="true" placeholder="Your Next Year Travel Gift">
+          <input type="text" class="form-control" x-model="form.name" required="true" placeholder="ex: Your Next Year Travel Gift">
         </div>
         <div class="mb-3">
           <label for="name" class="form-label">Options *</label>
-          <textarea class="form-control" x-model="form.options" required="true" rows="7" placeholder="London
+          <textarea class="form-control" x-model="form.options" required="true" rows="7" placeholder="ex:
+London
 Paris
 Dubai
 Bali
 Maldive"></textarea>
         </div>
         <div class="mb-3">
+          <label for="name" class="form-label">Input Hint *</label>
+          <input type="text" class="form-control" x-model="form.input_hint" placeholder="ex: Your Name" required />
+        </div>
+        <div class="mb-3">
           <label for="name" class="form-label">Comments</label>
-          <textarea class="form-control" x-model="form.comment" placeholder="This is special for you"></textarea>
+          <textarea class="form-control" x-model="form.comment" placeholder="ex: This is special for you" rows="5"></textarea>
         </div>
         <div class="mb-3">
           <label for="name" class="form-label">Password *</label>
-          <input type="text" class="form-control" x-model="form.password" required="true">
+          <input type="text" class="form-control" x-model="form.password" required="true" placeholder="ex: secr3tW0rd">
         </div>
         <div class="mb-3">
           After created, you can only edit the comment or delete the spin using the given password.
         </div>
         <div class="d-flex">
-          <button type="button" class="btn w-100 btn-secondary" @click="changeMode('home')">&larr; Cancel</button>
+          <button type="button" class="btn w-100 btn-secondary" @click="handleCancel">&larr; Cancel</button>
           <button class="btn w-100 btn-primary ms-3">Submit</button>
         </div>
       </form>
@@ -66,22 +71,33 @@ Maldive"></textarea>
         </h3>
         <div class="mb-3">
           <label for="name" class="form-label">Spin ID *</label>
-          <input type="text" class="form-control" x-model="formEdit.id" required="true" placeholder="" @input="refineID">
+          <div class="input-group">
+            <input type="text" class="form-control" x-model="formEdit.id" required="true" placeholder="ex: vz8zp77yhv" @input="refineID" :disabled="found">
+            <template x-if="!found">
+              <button type="button" class="btn btn-secondary" @click="handleCheck">Check</button>
+            </template>
+          </div>
         </div>
-        <div class="mb-3">
-          <label for="name" class="form-label">Comments</label>
-          <textarea class="form-control" x-model="formEdit.comment" placeholder="This is special for you"></textarea>
-        </div>
-        <div class="mb-4">
-          <label for="name" class="form-label">Password *</label>
-          <input type="text" class="form-control" x-model="formEdit.password" required="true">
-        </div>
-        <div class="mb-3 d-flex">
-          <button type="button" class="btn w-100 btn-danger" @click="handleDelete" :disabled="!formEdit.password || !formEdit.id">Delete</button>
-          <button class="btn w-100 btn-primary ms-3">Update</button>
-        </div>
-        <div class="d-flex">
-          <button type="button" class="btn w-100 btn-secondary" @click="changeMode('home')">&larr; Cancel</button>
+        <div x-show="found">
+          <div class="mb-3">
+            <label for="name" class="form-label">Input Hint *</label>
+            <input type="text" class="form-control" x-model="formEdit.input_hint" placeholder="ex: Your Name" required/>
+          </div>
+          <div class="mb-3">
+            <label for="name" class="form-label">Comments</label>
+            <textarea class="form-control" x-model="formEdit.comment" placeholder="ex: This is special for you" rows="5"></textarea>
+          </div>
+          <div class="mb-4">
+            <label for="name" class="form-label">Password *</label>
+            <input type="text" class="form-control" x-model="formEdit.password" required="true" placeholder="ex: secr3tW0rd">
+          </div>
+          <div class="mb-3 d-flex">
+            <button type="button" class="btn w-100 btn-danger" @click="handleDelete" :disabled="!formEdit.password || !formEdit.id">Delete</button>
+            <button class="btn w-100 btn-primary ms-3">Update</button>
+          </div>
+          <div class="d-flex">
+            <button type="button" class="btn w-100 btn-secondary" @click="handleCancel">&larr; Cancel</button>
+          </div>
         </div>
       </form>
     </template>
@@ -102,9 +118,9 @@ Maldive"></textarea>
         this.mode = mode
       },
       form: {},
-      formEdit: {
-        name: '-',
-        options: '-',
+      formEdit: {},
+      get found() {
+        return !!this.formEdit.created_at
       },
       refineID() {
         const id = this.formEdit.id || ''
@@ -120,6 +136,17 @@ Maldive"></textarea>
         }).catch(e => {
           alert('Something went wrong!')
           console.error(e)
+        })
+      },
+      handleCheck() {
+        const self = this
+        http.get(`/api/s/${this.formEdit.id}`).then(data => {
+          if (data.error) {
+            alert(data.error)
+          } else {
+            self.formEdit = data.spin
+            self.found = true
+          }
         })
       },
       handleEdit(isDelete) {
@@ -141,6 +168,11 @@ Maldive"></textarea>
         if (!confirm('Are you sure to delete this Spin?')) return
         this.handleEdit(true)
       },
+      handleCancel() {
+        this.form = {}
+        this.formEdit = {}
+        this.mode = 'home'
+      }
     })
     document.addEventListener('alpine:init', () => {
       Alpine.data('main', main)
