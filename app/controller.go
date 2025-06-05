@@ -43,7 +43,7 @@ func generateResult(result *Result) {
 	result.SpinID = result.Spin.ID
 	result.SelectedOption = pickRandomOption(parseOptions(result.Spin.Options))
 	result.Spin = nil
-	if err := DB.Create(&result); err != nil {
+	if err := DB.Create(&result).Error; err != nil {
 		result.ID = generateID()
 		DB.Create(&result)
 	}
@@ -67,7 +67,7 @@ func handleCreate(c *gin.Context) {
 		InputHint: req.InputHint,
 		Password:  req.Password,
 	}
-	if err := DB.Create(&spin); err != nil {
+	if err := DB.Create(&spin).Error; err != nil {
 		spin.ID = generateID()
 		DB.Create(&spin)
 	}
