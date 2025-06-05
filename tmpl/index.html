@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spin.zone.id</title>
+  <link rel="shortcut icon" href="/assets/logo.png">
+  <title>Spin.zone.id | Create and Share Spin!</title>
   <link rel="stylesheet" href="https://bootswatch.com/5/brite/bootstrap.min.css">
   <link rel="stylesheet" href="/assets/style.css">
 </head>
@@ -15,7 +16,8 @@
   <main class="container bg-light p-4 px-3 px-sm-4" x-data="main">
     <template x-if="mode == 'home'">
       <div class="mb-4 text-center">
-        <h3 class="mb-4 text-center">
+        <img src="/assets/logo.png" alt="logo" class="mb-4" width="150">
+        <h3 class="mb-3 text-center">
           Welcome!
         </h3>
         <p class="mb-3">
@@ -74,7 +76,7 @@ Maldive"></textarea>
           <div class="input-group">
             <input type="text" class="form-control" x-model="formEdit.id" required="true" placeholder="ex: vz8zp77yhv" @input="refineID" :disabled="found">
             <template x-if="!found">
-              <button type="button" class="btn btn-secondary" @click="handleCheck">Check</button>
+              <button type="button" class="btn btn-primary" @click="handleCheck">Check</button>
             </template>
           </div>
         </div>
@@ -95,9 +97,9 @@ Maldive"></textarea>
             <button type="button" class="btn w-100 btn-danger" @click="handleDelete" :disabled="!formEdit.password || !formEdit.id">Delete</button>
             <button class="btn w-100 btn-primary ms-3">Update</button>
           </div>
-          <div class="d-flex">
-            <button type="button" class="btn w-100 btn-secondary" @click="handleCancel">&larr; Cancel</button>
-          </div>
+        </div>
+        <div class="d-flex">
+          <button type="button" class="btn w-100 btn-secondary" @click="handleCancel">&larr; Cancel</button>
         </div>
       </form>
     </template>
