@@ -158,11 +158,11 @@ Maldive"></textarea>
           if (data.error) {
             alert(data.error)
           } else {
-            if (self.form.is_delete) {
+            if (self.formEdit.is_delete) {
               alert('Deleted!')
               location.reload()
             } else {
-              location.href = '/s/'+data.spin.id
+              location.href = '/s/'+self.formEdit.id
             }
           }
         }).catch(e => {
