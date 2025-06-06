@@ -158,8 +158,12 @@ Maldive"></textarea>
           if (data.error) {
             alert(data.error)
           } else {
-            alert(self.form.is_delete ? 'Deleted!' : 'Updated!')
-            location.reload()
+            if (self.form.is_delete) {
+              alert('Deleted!')
+              location.reload()
+            } else {
+              location.href = '/s/'+data.spin.id
+            }
           }
         }).catch(e => {
           alert('Something went wrong!')
