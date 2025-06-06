@@ -92,7 +92,7 @@
   <script src="/assets/main.js" defer></script>
   <script>
     function linkify(text) {
-      const urlRegex = /(https?:\/\/[^\s]+)/g;
+      const urlRegex = /(https?:\/\/[^\s<>()]+[^.,!?;:)\]\s<>()])/g;
       return text.replace(urlRegex, (url) => {
         return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
       });
