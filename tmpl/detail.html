@@ -31,14 +31,14 @@
           <p class="mb-3">
             Result for input: <b>"{{ .result.Input }}"</b>
           </p>
-          <button class="btn btn-lg btn-primary mb-3 w-100">
+          <button class="btn btn-lg btn-primary mb-3 w-100 active">
             {{ .result.SelectedOption }}
           </button>
           <a href="javascript:;" @click="shareResult">Share this result!</a>
         </div>
         <div class="text-center mb-4">
-          <a href="/s/{{ .result.SpinID }}" class="text-muted" target="_blank">
-            Try different input &nearr;
+          <a href="/s/{{ .result.SpinID }}" class="btn btn-secondary" target="_blank">
+            Try your input &nearr;
           </a>
         </div>
       </div>
@@ -84,8 +84,14 @@
     {{ end }}
   </main>
   <footer class="text-light container py-3 text-center">
-    <p class="m-0">Made By: 
-      <a href="https://gx1.org" class="text-light" target="_blank" rel="noopener noreferrer">PT. Geksa</a>
+    <p class="m-0">
+      &copy; 2025
+      <span class="d-none">
+        - By
+        <a href="https://gx1.org" class="text-light" target="_blank" rel="noopener noreferrer">
+          PT. Geksa
+        </a>
+      </span>
     </p>
   </footer>
   <script src="//unpkg.com/alpinejs" defer></script>
