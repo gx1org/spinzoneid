@@ -3,7 +3,9 @@
 echo "running go mod tidy"
 cd ..
 go mod tidy
-cp .env.example .env
+if [ ! -f .env ]; then
+  cp .env.example .env
+fi
 cd ..
 
 echo "TODO:"
